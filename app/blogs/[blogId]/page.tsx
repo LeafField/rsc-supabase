@@ -13,6 +13,19 @@ type PageProps = {
   };
 };
 
+export async function generateStaticParams() {
+  const res = await fetch(`${process.env.url}/rest/v1/blogs?select=*`, {
+    headers: new Headers({
+      apikey: String(process.env.apikey),
+    }),
+  });
+  const blogs: Blogs[] = await res.json();
+
+  return blogs.map((blog) => ({
+    blogId: blog.id.toString(),
+  }));
+}
+
 const fecthBlog = async (blogId: string) => {
   const res = await fetch(
     `${process.env.url}/rest/v1/blogs?id=eq.${blogId}&select=*`,
@@ -20,14 +33,13 @@ const fecthBlog = async (blogId: string) => {
       headers: new Headers({
         apikey: String(process.env.apikey),
       }),
-      cache: 'no-store',
+      cache: 'force-cache',
     }
   );
-  if (!res.ok) {
-    throw new Error('Faild to Fetch data in server');
-  }
+  // if (!res.ok) {
+  //   throw new Error('Faild to Fetch data in server');
+  // }
   const blogs: Blogs[] = await res.json();
-  console.log(blogs[0]);
   return blogs[0];
 };
 

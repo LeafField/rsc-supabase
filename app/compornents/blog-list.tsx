@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import type { Database } from '@/database.types';
 
 type Blog = Database['public']['Tables']['blogs']['Row'];
@@ -9,7 +8,7 @@ const fetchBlog = async () => {
     headers: new Headers({
       apikey: String(process.env.apikey),
     }),
-    cache: 'force-cache',
+    cache: 'no-store',
   });
   if (!res.ok) {
     throw new Error('Faild to fetch data');
@@ -18,20 +17,23 @@ const fetchBlog = async () => {
   return blogs;
 };
 
-const BlogListStatic = async () => {
+const BlogList = async () => {
   const blogs = await fetchBlog();
 
   return (
     <div className="p-4">
-      {blogs.map((blog) => (
-        <li key={blog.id} className="my-1 text-base">
-          <Link prefetch={false} href={`/blogs/${blog.id}`}>
+      <p className="mb-4 pb-3 text-xl font-medium underline underline-offset-4">
+        Blogs
+      </p>
+      <ul className="text-sm">
+        {blogs.map((blog) => (
+          <li key={blog.id} className="my-1 text-base">
             {blog.title}
-          </Link>
-        </li>
-      ))}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default BlogListStatic;
+export default BlogList;

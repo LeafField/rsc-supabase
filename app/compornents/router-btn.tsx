@@ -6,7 +6,7 @@ type Props = {
   destination?: string;
 };
 
-const RouterBtn: FC<Props> = ({ destination }) => {
+const RouterBtn: FC<Props> = ({ destination = '' }) => {
   const router = useRouter();
   return (
     <button
