@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 type EditedTask = {
   id: string;
@@ -11,14 +11,26 @@ type LoginUser = {
 
 type State = {
   editedTask: EditedTask;
-  updateEditedTask: () => void;
+  updateEditedTask: (payload: EditedTask) => void;
+  resetEditedTask: () => void;
   loginUser: LoginUser;
   updateLoginUser: (payload: LoginUser) => void;
   resetLoginUser: () => void;
 };
 
-// const useStore = create<State>((set) => ({
-//   editedTask:{id:'',title:''},
-// }))
+const useStore = create<State>((set) => ({
+  editedTask: { id: '', title: '' },
+  updateEditedTask: (payload) =>
+    set({
+      editedTask: payload,
+    }),
+  resetEditedTask: () => set({ editedTask: { id: '', title: '' } }),
+  loginUser: { id: '', email: '' },
+  resetLoginUser: () => set({ loginUser: { id: '', email: '' } }),
+  updateLoginUser: (payload) =>
+    set({
+      loginUser: payload,
+    }),
+}));
 
-// export default useStore
+export default useStore;
